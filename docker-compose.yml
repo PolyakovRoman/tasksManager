@@ -28,10 +28,7 @@ services:
     container_name: tasks-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: tasks
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
+      POSTGRES_PASSWORD: pass
     volumes:
       - db_data:/var/lib/postgresql/data
 
