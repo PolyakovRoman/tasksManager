@@ -52,7 +52,7 @@ class UserRepository implements UserRepositoryInterface
      * @param int $offset
      * @return Paginator
      */
-    public function findPaginator(int $limit, int $offset): Paginator
+    public function findAllPaginator(int $limit, int $offset): Paginator
     {
         $query = $this->repository
             ->createQueryBuilder('u')

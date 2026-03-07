@@ -12,7 +12,7 @@ interface UserRepositoryInterface
 
     public function findAll(): array;
 
-    public function findPaginator(int $limit, int $offset): Paginator;
+    public function findAllPaginator(int $limit, int $offset): Paginator;
 
     public function save(User $user): void;
 }
