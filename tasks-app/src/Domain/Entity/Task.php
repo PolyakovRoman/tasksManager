@@ -11,12 +11,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\Table(name: '`task`')]
 #[ORM\Index(columns: ["status"])]
-#[ORM\Index(columns: ["userComplete_id"])]
+#[ORM\Index(columns: ["user_completed_id"])]
 class Task
 {
     #[ORM\Id]
     #[ORM\Column(type: "uuid", unique: true)]
-    private Uiid $id = null;
+    private Uiid $id;
 
     #[ORM\Column(length: 255)]
     private ?string $name;
@@ -30,7 +30,7 @@ class Task
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private User $userComplete;
+    private User $userCompleted;
 
     #[ORM\Column(type: "string", enumType: TaskStatus::class)]
     private TaskStatus $status;
