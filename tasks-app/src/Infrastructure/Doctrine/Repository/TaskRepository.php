@@ -11,8 +11,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 class TaskRepository extends ServiceEntityRepository implements TaskRepositoryInterface
 {
-    private EntityRepository $repository;
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Task::class);
@@ -24,13 +22,12 @@ class TaskRepository extends ServiceEntityRepository implements TaskRepositoryIn
      */
     public function findById(int $id): ?Task
     {
-        return $this->repository->find($id);
+        return $this-->find($id);
     }
 
     public function findAllPaginator(int $limit, int $offset): Paginator
     {
-        $query = $this->repository
-            ->createQueryBuilder('t')
+        $query = $this->createQueryBuilder('t')
             ->orderBy('t.id', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)

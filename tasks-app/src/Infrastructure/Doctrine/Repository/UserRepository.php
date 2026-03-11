@@ -6,13 +6,10 @@ use App\Domain\Entity\User;
 use App\Domain\Repository\UserRepositoryInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class UserRepository extends ServiceEntityRepository implements UserRepositoryInterface
 {
-    private EntityRepository $repository;
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
@@ -24,7 +21,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
      */
     public function findById(int $id): ?User
     {
-        return $this->repository->find($id);
+        return $this->find($id);
     }
 
     /**
@@ -41,8 +38,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
      */
     public function findAll(): array
     {
-        return $this->repository
-            ->createQueryBuilder('u')
+        return $this->createQueryBuilder('u')
             ->orderBy('u.id', 'DESC')
             ->getQuery()
             ->getResult();
@@ -55,8 +51,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
      */
     public function findAllPaginator(int $limit, int $offset): Paginator
     {
-        $query = $this->repository
-            ->createQueryBuilder('u')
+        $query = $this->createQueryBuilder('u')
             ->orderBy('u.id', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
