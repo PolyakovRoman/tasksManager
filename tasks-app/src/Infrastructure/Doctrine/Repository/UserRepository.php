@@ -4,17 +4,18 @@ namespace App\Infrastructure\Doctrine\Repository;
 
 use App\Domain\Entity\User;
 use App\Domain\Repository\UserRepositoryInterface;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
-class UserRepository implements UserRepositoryInterface
+class UserRepository extends ServiceEntityRepository implements UserRepositoryInterface
 {
     private EntityRepository $repository;
 
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->repository = $em->getRepository(User::class);
+        parent::__construct($registry, User::class);
     }
 
     /**
@@ -32,7 +33,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findByEmail(string $email): ?User
     {
-        return $this->repository->findOneBy(['email' => $email]);
+        return $this->findOneBy(['email' => $email]);
     }
 
     /**

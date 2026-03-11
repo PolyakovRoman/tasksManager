@@ -4,12 +4,16 @@ namespace App\Domain\Entity;
 
 use App\Infrastructure\Doctrine\Repository\UserRepository;
 use App\Domain\Enum\RoleLevel;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -17,13 +21,13 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Name = null;
+    private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $phone = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $phone = null;
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
@@ -34,6 +38,23 @@ class User
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\OneToMany(mappedBy: 'userCreated', targetEntity: Task::class, fetch: "LAZY")]
+    private Collection $createdTasks;
+
+    #[ORM\OneToMany(mappedBy: 'userAppointed', targetEntity: Task::class, fetch: "LAZY")]
+    private Collection $appointedTasks;
+
+    #[ORM\OneToMany(mappedBy: 'userCompleted', targetEntity: Task::class, fetch: "LAZY")]
+    private Collection $completedTasks;
+
+    public function __construct()
+    {
+        $this->createdTasks = new ArrayCollection();
+        $this->appointedTasks = new ArrayCollection();
+        $this->completedTasks = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -41,12 +62,12 @@ class User
 
     public function getName(): ?string
     {
-        return $this->Name;
+        return $this->name;
     }
 
-    public function setName(string $Name): static
+    public function setName(string $name): static
     {
-        $this->Name = $Name;
+        $this->name = $name;
 
         return $this;
     }
@@ -68,15 +89,33 @@ class User
         return $this->phone;
     }
 
+    public function setPhone(?int $phone): static
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
     public function getPassword(): string
     {
         return $this->password;
     }
 
-
-    public function setPhone(?int $phone): static
+    public function setPassword(string $password): static
     {
-        $this->phone = $phone;
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function getRole(): ?RoleLevel
+    {
+        return $this->role;
+    }
+
+    public function setRole(RoleLevel $role): static
+    {
+        $this->role = $role;
 
         return $this;
     }
@@ -91,5 +130,20 @@ class User
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return [$this->role->name];
+    }
+
+    public function eraseCredentials(): void
+    {
+
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
     }
 }

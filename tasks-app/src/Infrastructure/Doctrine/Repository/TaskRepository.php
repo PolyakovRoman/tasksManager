@@ -4,17 +4,18 @@ namespace App\Infrastructure\Doctrine\Repository;
 
 use App\Domain\Entity\Task;
 use App\Domain\Repository\TaskRepositoryInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-class TaskRepository implements TaskRepositoryInterface
+class TaskRepository extends ServiceEntityRepository implements TaskRepositoryInterface
 {
     private EntityRepository $repository;
 
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->repository = $em->getRepository(Task::class);
+        parent::__construct($registry, Task::class);
     }
 
     /**

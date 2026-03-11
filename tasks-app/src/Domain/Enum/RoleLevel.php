@@ -3,6 +3,22 @@ namespace App\Domain\Enum;
 
 enum RoleLevel: string
 {
-case ADMIN = 'Адмиин';
-case USER = 'Обычный пользователь';
+    case ROLE_ADMIN = 'Admin';
+    case ROLE_USER = 'User';
+    case PUBLIC_ACCESS = 'All Users';
+
+    public function isAdmin(): bool
+    {
+        return $this === self::ROLE_ADMIN;
+    }
+
+    public function isUser(): bool
+    {
+        return $this === self::ROLE_USER;
+    }
+
+    public function isPublic(): bool
+    {
+        return $this === self::PUBLIC_ACCESS;
+    }
 }

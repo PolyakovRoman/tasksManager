@@ -16,7 +16,7 @@ class Task
 {
     #[ORM\Id]
     #[ORM\Column(type: "uuid", unique: true)]
-    private Uiid $id;
+    private Uuid $id;
 
     #[ORM\Column(length: 255)]
     private ?string $name;
@@ -24,13 +24,17 @@ class Task
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, fetch: "LAZY")]
     #[ORM\JoinColumn(nullable: false)]
-    private User $userAppointed;
+    private User $userCreated;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private User $userCompleted;
+    #[ORM\ManyToOne(targetEntity: User::class, fetch: "LAZY")]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $userAppointed = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class, fetch: "LAZY")]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $userCompleted = null;
 
     #[ORM\Column(type: "string", enumType: TaskStatus::class)]
     private TaskStatus $status;
@@ -71,7 +75,12 @@ class Task
         $this->description = $description;
     }
 
-    public function getUserAppointed(): User
+    public function getUserCreated(): User
+    {
+        return $this->userCreated;
+    }
+
+    public function getUserAppointed(): ?User
     {
         return $this->userAppointed;
     }
@@ -79,6 +88,11 @@ class Task
     public function getUserCompleted(): ?User
     {
         return $this->userCompleted;
+    }
+
+    public function setUserAppointed(?User $userAppointed): void
+    {
+        $this->userAppointed = $userAppointed;
     }
 
     public function setUserCompleted(?User $userCompleted): void
@@ -91,19 +105,34 @@ class Task
         return $this->status;
     }
 
-    public function close(): void
+    public function setClose(): void
     {
         $this->status = TaskStatus::CLOSED;
     }
 
-    public function work(): void
+    public function setWork(): void
     {
         $this->status = TaskStatus::WORK;
     }
 
-    public function open(): void
+    public function setOpen(): void
     {
         $this->status = TaskStatus::OPEN;
+    }
+
+    public function isClose(): bool
+    {
+        return $this->status === TaskStatus::CLOSED;
+    }
+
+    public function isWork(): bool
+    {
+        return $this->status === TaskStatus::WORK;
+    }
+
+    public function isOpen(): bool
+    {
+        return $this->status === TaskStatus::OPEN;
     }
 
     public function getDeadline(): \DateTimeImmutable
