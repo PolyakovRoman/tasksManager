@@ -22,7 +22,7 @@ class TaskRepository extends ServiceEntityRepository implements TaskRepositoryIn
      */
     public function findById(int $id): ?Task
     {
-        return $this-->find($id);
+        return $this->find($id);
     }
 
     public function findAllPaginator(int $limit, int $offset): Paginator
