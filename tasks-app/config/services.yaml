@@ -21,3 +21,16 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Security\Handler\LoginSuccessHandler:
+        tags:
+            - { name: 'lexik_jwt_authentication.handler.authentication_success' }
+
+    App\Security\Handler\LoginFailureHandler:
+        tags:
+            - { name: 'lexik_jwt_authentication.handler.authentication_failure' }
+
+    acme_api.event.jwt_notfound_listener:
+        class: App\Security\Handler\JWTNotFoundHandler
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_not_found, method: onJWTNotFound }
