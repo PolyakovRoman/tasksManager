@@ -1,5 +1,5 @@
 <?php
-namespace App\Interface\Http\Controller;
+namespace App\Presentation\Http\Controller;
 
 use App\Application\DTO\RegistrationRequest;
 use App\Domain\Entity\User;
