@@ -31,6 +31,6 @@ services:
             - { name: 'lexik_jwt_authentication.handler.authentication_failure' }
 
     acme_api.event.jwt_notfound_listener:
-        class: App\Security\Handler\JWTNotFoundHandler
+        class: App\User\Security\Handler\JWTNotFoundHandler
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_not_found, method: onJWTNotFound }

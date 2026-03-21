@@ -1,12 +1,12 @@
 security:
     password_hashers:
-        App\Domain\Entity\User:
+        App\User\Domain\Entity\User:
             algorithm: auto
 
     providers:
         app_user_provider:
             entity:
-                class: App\Domain\Entity\User
+                class: App\User\Domain\Entity\User
                 property: email
 
     firewalls:
@@ -17,16 +17,17 @@ security:
                 check_path: /api/login
                 username_path: email
                 password_path: password
-                success_handler: App\Security\Handler\LoginSuccessHandler
-                failure_handler: App\Security\Handler\LoginFailureHandler
+                success_handler: App\User\Security\Handler\LoginSuccessHandler
+                failure_handler: App\User\Security\Handler\LoginFailureHandler
 
         api:
             pattern: ^/api
             stateless: true
             jwt: ~
+            access_denied_handler: App\User\Security\Handler\AccessDeniedHandler
 
     access_control:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/registration, roles: PUBLIC_ACCESS }
-        - { path: ^/api/user/create, roles: ROLE_ADMIN }
+        - { path: ^/api/user, roles: ROLE_ADMIN }
         - { path: ^/api, roles: ROLE_USER }
