@@ -27,6 +27,11 @@ class UserController extends AbstractController
         private UserRepositoryInterface $userRepository
     ) {}
 
+    /**
+     * Login route
+     *
+     * @return JsonResponse
+     */
     #[Route('/api/login', name: 'api_user_login', methods: ['POST'])]
     public function login(): JsonResponse
     {
@@ -34,6 +39,8 @@ class UserController extends AbstractController
     }
 
     /**
+     * Registration user
+     *
      * @param Request $request
      * @return JsonResponse
      */
@@ -52,10 +59,12 @@ class UserController extends AbstractController
         return $this->apiResponse(true, []);
     }
 
-/**
- * @param Request $request
- * @return JsonResponse
- */
+    /**
+     * Create user
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     #[Route('/api/user', name: 'api_user_create', methods: ['POST'])]
     public function create(
         Request $request
@@ -71,6 +80,13 @@ class UserController extends AbstractController
         return $this->apiResponse(true, []);
     }
 
+    /**
+     * Update User by id
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
     #[Route('/api/user/{id}', name: 'api_user_update', methods: ['PATCH', 'PUT'])]
     public function update(
         Request $request,
@@ -87,6 +103,12 @@ class UserController extends AbstractController
         return $this->apiResponse(true, []);
     }
 
+    /**
+     * Get User by id
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
     #[Route('/api/user/{id}', name: 'api_user_get', methods: ['GET'])]
     public function get(
         int $id
@@ -104,6 +126,13 @@ class UserController extends AbstractController
         );
     }
 
+    /**
+     * All users
+     *
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @return JsonResponse
+     */
     #[Route('/api/user', name: 'api_user_all', methods: ['GET'])]
     public function all(
         Request $request,
